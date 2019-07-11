@@ -1,0 +1,126 @@
+<style>
+    .sms-form {
+        width: 300px;
+        margin: 0 auto;
+        font-family: Tahoma, Geneva, sans-serif;
+    }
+
+    .sms-form h1 {
+        text-align: center;
+        color: #4d4d4d;
+        font-size: 24px;
+        padding: 20px 0 20px 0;
+    }
+
+    .sms-form input[type="password"],
+    .sms-form input[type="text"] {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #dddddd;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    .sms-form input[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background-color: #535b63;
+        border: 0;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-weight: bold;
+        color: #ffffff;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>Broadcast SMS</h1>
+            <form method="post" id="form_input" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="msisdn">Group</label>
+                    <select class="form-control" name="group_id">
+                        <option value="">Choose Group</option>
+                        <% results.forEach((row) => { %>
+                        <option value="<%= row.id %>"><%= row.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="msisdn">Message</label>
+                    <textarea class="form-control" rows=10 cols=13 maxlength=145 name="message" placeholder="Message"
+                        id="message"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Broadcast</button>
+
+                <a href="/input" class="btn btn-default">Add Number</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <div class="panel-body">
+                <div class="jumbotron">
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Content</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody><% var i = 1; smscontent.forEach((row) => { %>
+                                <tr>
+                                    <th scope="row"><%= i%></th>
+                                    <td><%= row.content%></td>
+                                    <td>@<%= new Date(row.created_at)%></td>
+                                    <td><a class='btn btn-primary' href='log/detail/<%= row.id %>'>View Detail Log</a>
+                                    </td>
+                                </tr>
+                                <% i++}) ; %>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#message").keypress(function (e) {
+            if (e.which < 31 || (e.which > 32 && e.which < 48) ||
+                (e.which > 57 && e.which < 65) ||
+                (e.which > 90 && e.which < 97) ||
+                e.which > 122) {
+                e.preventDefault();
+            }
+        });
+        $("form").submit(function () {
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    type: 'post',
+                    url: '/sendsms',
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        if(data.error){
+                            alert(data.message);
+                        }else{
+                            alert(data.message);
+                            $('form').trigger("reset");
+                        }
+                        
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>

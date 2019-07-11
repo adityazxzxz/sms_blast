@@ -1,0 +1,49 @@
+<!-- page head start-->
+            <div class="page-head">
+                <h3>
+                    Dashboard
+                </h3>
+                <span class="sub-title">Welcome to SMS Burst App</span>
+            </div>
+            <!-- page head end-->
+
+            <!--body wrapper start-->
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div class="jumbotron">
+                 <div class="panel-body">
+                 <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">MSISDN</th>
+      <th scope="col">Status</th>
+      <th scope="col">Created At</th>
+      <th scope="col">Updated At</th>
+    </tr>
+  </thead>
+  <tbody><% var i = 1; results.forEach((row) => { %>
+                    <tr>
+      <th scope="row"><%= i%></th>
+      <td><%= row.msisdn%></td>
+      <td><%= row.status%></td>
+      <td>@<%= new Date(row.created_at)%></td>
+      <td>@<%= new Date(row.updated_at)%></td>
+    </tr>
+                <% i++}) ; %>
+   
+  </tbody>
+</table>
+                 </div>                  
+                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--body wrapper end-->

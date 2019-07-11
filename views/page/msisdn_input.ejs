@@ -1,0 +1,87 @@
+<style>
+    .sms-form {
+        width: 300px;
+        margin: 0 auto;
+        font-family: Tahoma, Geneva, sans-serif;
+    }
+
+    .sms-form h1 {
+        text-align: center;
+        color: #4d4d4d;
+        font-size: 24px;
+        padding: 20px 0 20px 0;
+    }
+
+    .sms-form input[type="password"],
+    .sms-form input[type="text"] {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #dddddd;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    .sms-form input[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background-color: #535b63;
+        border: 0;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-weight: bold;
+        color: #ffffff;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>Input MSISDN</h1>
+            <form method="post" id="form_input" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="msisdn">Group</label>
+                    <select class="form-control" name="group_id">
+                        <option value="">Choose Group</option>
+                        <% results.forEach((row) => { %>
+                        <option value="<%= row.id %>"><%= row.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="msisdn">MSISDN</label>
+                    <input type="text" class="form-control" name="msisdn" placeholder="62812xxxxxxx" id="msisdn">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <a href="/group" class="btn btn-danger">Add Group</a>
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#msisdn").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
+        $("form").submit(function () {
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    type: 'post',
+                    url: '/inputmsisdn',
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        alert(data.message);
+                        $('form').trigger("reset");
+                    }
+                });
+            }
+
+
+            return false;
+        });
+    });
+</script>

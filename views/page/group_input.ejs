@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>Input Group</h1>
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="msisdn">Group Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Input Group name" id="group"
+                        require>
+                </div>
+
+                <div class="form-group">
+                    <label for="msisdn">Source Name</label>
+                    <input type="text" class="form-control" name="source" placeholder="Input Source Name" id="source"
+                        require>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <a href="/" class="btn btn-danger">Back</a>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="jumbotron">
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Group</th>
+                                    </tr>
+                                </thead>
+                                <tbody><% var i = 1; results.forEach((row) => { %>
+                                    <tr>
+                                        <th scope="row"><%= i%></th>
+                                        <td><%= row.name%></td>
+                                        <td><a href='msisdndetail/<%= row.id%>' class='btn btn-primary'>Get List</a>
+                                        </td>
+                                    </tr>
+                                    <% i++}) ; %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#source').keypress(function (e) {
+            if (e.which < 48 ||
+                (e.which > 57 && e.which < 65) ||
+                (e.which > 90 && e.which < 97) ||
+                e.which > 122) {
+                e.preventDefault();
+            }
+        });
+        $("form").submit(function () {
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    type: 'post',
+                    url: '/savegroup',
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        if(data.error){
+                            alert(data.message);
+                        }else{
+                            alert(data.message);
+                            location.reload();
+                        }
+                    }
+                });
+
+            }
+
+
+            return false;
+        });
+    });
+</script>

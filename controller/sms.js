@@ -1,4 +1,5 @@
 const db = require('../db/database');
+const conf = require('../config/config');
 var axios = require('axios');
 
 function Constructor() {
@@ -163,12 +164,12 @@ function Constructor() {
 									console.log('p_logs ', datauser.msisdn);
 									axios.get('https://httpsmsc.montymobile.com/HTTP/api/Client/SendSMS', {
 										params: {
-											username: '',
-											password: 'aS!',
+											username: conf.m_username,
+											password: conf.m_password,
 											destination: datauser.msisdn,
 											source: datauser.source,
 											text: message,
-											dataCoding: 0
+											dataCoding: conf.m_datacoding
 										}
 									}).then((res) => {
 										var status = (res.data.ErrorCode === 0) ? 'success' : 'fail';

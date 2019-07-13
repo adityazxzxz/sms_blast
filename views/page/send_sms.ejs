@@ -114,13 +114,12 @@
                             alert(data.message);
                         }else{
                             alert(data.message);
-                            $('form').trigger("reset");
+                            reload.location();
                         }
                         
                     }
                 });
             }
-            return false;
         });
     });
 </script>

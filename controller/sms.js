@@ -76,10 +76,14 @@ function Constructor() {
 	}
 
 	this.delete = async (req, res, next) => {
-		var id = req.params.id;
+		var id = req.body.id;
 		let results = await deleteMsisdn(id);
 		console.log(results);
-		res.redirect('/group');
+		if(results.affectedRows > 0){
+			res.json({error:false,message:"Delete Succeed"});
+		}else{
+			res.json({error:true,message:"Delete Failed"});
+		}
 	}
 
 	this.msisdndetail = async (req, res, next) => {

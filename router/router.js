@@ -15,11 +15,14 @@ module.exports = {
 		app.route('/log/detail/:id').get(session,sms.log);
 		app.route('/msisdndetail/:id').get(session,sms.msisdndetail);
 
+
+		//POST
+
 		app.route('/login').post(user.login);
 		app.route('/sendsms').post(session,sms.sendsms);
 		app.route('/inputmsisdn').post(session,sms.inputmsisdn);
 		app.route('/savegroup').post(session,sms.savegroup);
-		app.route('/deletemsisdn/:id').delete(session,sms.delete);
+		app.route('/msisdn/delete').post(session,sms.delete);
 		
 
 		// app.route('/home').get((req,res,next) => {

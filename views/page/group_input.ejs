@@ -1,54 +1,102 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <h1>Input Group</h1>
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="msisdn">Group Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Input Group name" id="group"
-                        require>
+<div class="wrapper">
+    <ul class="breadcrumb">
+        <li><a href="/home"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">
+            Group</li>
+    </ul>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-default btn-md" data-toggle="modal"
+                        data-target="#mymodal"><i class="fa fa-plus"></i> New Group</button>
                 </div>
+                <div class="col-md-4 text-center">
 
-                <div class="form-group">
-                    <label for="msisdn">Source Name</label>
-                    <input type="text" class="form-control" name="source" placeholder="Input Source Name" id="source"
-                        require>
                 </div>
+                <div class="col-md-1 text-right">
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-md-3 text-right">
+                    <!-- <form action="group" class="form-inline"
+                        method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q" value="">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>
+                                    Search</button>
+                            </span>
+                        </div>
+                    </form> -->
+                </div>
+            </div>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Group Name
+                        </th>
+                        <th width="125" class="text-center">
+                            Action
+                        </th>
 
-                <a href="/" class="btn btn-danger">Back</a>
-            </form>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var i = 1; results.forEach((row) => { %>
+                    <tr>
+                        <td><%= i%></td>
+                        <td><%= row.name%></td>
+                        <td class="text-center">
+                                <a href='msisdndetail/<%= row.id%>' class='btn btn-primary'>Get List</a>
+                        </td>
+                    </tr>
+                    <% i++}) ; %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            Total Record : 8 </td>
+                        <td colspan="5" align="right"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <section class="panel">
-                <div class="panel-body">
-                    <div class="jumbotron">
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Group</th>
-                                    </tr>
-                                </thead>
-                                <tbody><% var i = 1; results.forEach((row) => { %>
-                                    <tr>
-                                        <th scope="row"><%= i%></th>
-                                        <td><%= row.name%></td>
-                                        <td><a href='msisdndetail/<%= row.id%>' class='btn btn-primary'>Get List</a>
-                                        </td>
-                                    </tr>
-                                    <% i++}) ; %>
+    <div id="mymodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
                 </div>
-            </section>
+                <div class="modal-body">
+                    <form method="post" id="form-group" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="msisdn">Group Name</label>
+                            <input type="text" class="form-control" name="name" placeholder="Input Group name"
+                                id="group" require>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="msisdn">Source Name</label>
+                            <input type="text" class="form-control" name="source" placeholder="Input Source Name"
+                                id="source" require>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -63,7 +111,7 @@
                 e.preventDefault();
             }
         });
-        $("form").submit(function () {
+        $("#form-group").submit(function () {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You will add msisdn",
@@ -76,7 +124,7 @@
                 if (result.value) {
                     $.ajax({
                         type: 'post',
-                        url: '/savegroup',
+                        url: '/group/save',
                         data: $(this).serialize(),
                         success: function (e) {
                             if (!e.error) {

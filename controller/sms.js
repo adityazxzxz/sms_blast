@@ -113,7 +113,18 @@ function Constructor() {
 	this.group = async (req, res, next) => {
 		var user_session = req.session;
 		var mainpage = 'group_input';
-		let results = await findGroup();
+		if(mainpage === "group_inpu"){
+			var cond = {
+				test:'haha'
+			};
+		}else{
+			var cond = {
+				test:'hoho'
+			};
+		}
+
+
+		let results = await findGroup(cond);
 		res.render('page/index', { user_session, mainpage, results });
 	}
 

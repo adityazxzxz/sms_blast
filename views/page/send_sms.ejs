@@ -116,7 +116,7 @@
                 if (result.value) {
                     $.ajax({
                         type: 'post',
-                        url: '/sendsms',
+                        url: '/sms/send',
                         data: $(this).serialize(),
                         success: function (e) {
                             if (!e.error) {

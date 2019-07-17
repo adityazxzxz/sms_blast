@@ -1,15 +1,19 @@
-var mysql = require('mysql');
-var conf = require('../config/config.js');
+const Sequelize = require('sequelize');
+const db = {};
+const sequelize = new Sequelize('pusbangfilemdb','root','',{
+	host:'localhost',
+	dialect:'mysql',
+	operatorAliases:false,
+	pool:{
+		max:5,
+		min:0,
+		acquire:30000,
+		idle:10000
+	}
+});
 
+db.Sequelize = Sequelize;
 
-var config = {
-		connectionLimit:5,
-		host:conf.db_host,
-		user:conf.db_user,
-		password:conf.db_password,
-		database:conf.db_database,
-		timezone:'utc'
-	};
-var con =  mysql.createPool(config);
-
-module.exports = con;
+db.Msisdn = require('../models/msisdn')(sequelize,Sequelize);
+db.Group = require('../models/group')(sequelize,Sequelize);
+module.exports = db;

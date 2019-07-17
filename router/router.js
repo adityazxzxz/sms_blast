@@ -27,7 +27,7 @@ module.exports = {
 		app.route('/group/save').post(session,sms.savegroup);
 
 		//MSISDN
-		app.route('/msisdn').get(session,msisdn.getall);
+		app.route('/msisdn').get(msisdn.getall);
 
 		//POST
 

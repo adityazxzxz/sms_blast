@@ -22,8 +22,11 @@ module.exports = (sequelize,Sequelize) => {
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         },{
+            paranoid: false,
+            underscored: false,
             timestamps:false,
-            freezeTableName:true
+            freezeTableName:true,
+            tableName:'p_group'
         }
     );
     return Group;

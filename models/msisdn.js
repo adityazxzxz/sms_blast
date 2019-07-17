@@ -11,7 +11,10 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.INTEGER,
             },
             msisdn: {
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER,
+                validate:{
+                    isNumeric:true
+                }
             },
             created_at: {
                 type: 'TIMESTAMP',
@@ -20,7 +23,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         {
             timestamps: false,
-            freezeTableName: true
+            paranoid: false,
+            underscored: false,
+            freezeTableName: true,
+            tableName:'p_msisdn'
         }
     );
     return Msisdn;

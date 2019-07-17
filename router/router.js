@@ -28,12 +28,13 @@ module.exports = {
 
 		//MSISDN
 		app.route('/msisdn').get(msisdn.getall);
+		app.route('/msisdn/save').post(msisdn.save);
 
 		//POST
 
 		app.route('/login').post(user.login);
 		
-		app.route('/inputmsisdn').post(session,sms.inputmsisdn);
+		
 		
 		app.route('/msisdn/delete').post(session,sms.delete);
 		

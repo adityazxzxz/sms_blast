@@ -6,26 +6,22 @@ function Constructor() {
 	this.getall = async (req, res, next) => {
 		var user_session = req.session;
         var mainpage = 'msisdn_input';
-		let results = await db.Group.findAll({
-		});
-		let msisdn = await db.Msisdn.findAll();
-		console.log(results);
-		res.render('page/index', { user_session, mainpage, results, msisdn });
+		let group = await db.Group.findAll();
+		res.render('page/index', { user_session, mainpage, group });
 	}
     
 	this.save = (req, res, next) => {
-		var group = req.body.name;
-		var source = req.body.source;
-		if (group && source) {
-			db.query("INSERT INTO p_group (name,source) values(?,?)", [group, source], (error, results) => {
-				if (error) {
-					console.log(error);
-					return res.json({ error: true, message: 'something wrong' });
-				}
-				return res.json({ error: false, message: 'Input group success' });
+		var id = req.body.group_id;
+		var msisdn = req.body.msisdn;
+		if (id && msisdn) {
+			db.Msisdn.create({group_id:id,msisdn:msisdn}).then((result) => {
+				return res.json({error:false,message:'Msisdn saved successfully!'});
+			}).catch((err) => {
+				console.log(err.errors[0].message);
+				return res.json({error:true,message:err.errors[0].message});
 			});
 		} else {
-			return res.json({ error: true, message: 'Fill text box' });
+			return res.json({ error: true, message: 'Complete the form!' });
 		}
 
 	}

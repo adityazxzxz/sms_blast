@@ -16,4 +16,7 @@ db.Sequelize = Sequelize;
 
 db.Msisdn = require('../models/msisdn')(sequelize,Sequelize);
 db.Group = require('../models/group')(sequelize,Sequelize);
+
+db.Group.hasMany(db.Msisdn,{foreignKey:'group_id',targetKey:'id'});
+db.Msisdn.belongsTo(db.Group,{foreignKey:'group_id',targetKey:'id'});
 module.exports = db;

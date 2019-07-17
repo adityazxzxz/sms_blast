@@ -41,7 +41,7 @@
                     <label for="msisdn">Group</label>
                     <select class="form-control" name="group_id">
                         <option value="">Choose Group</option>
-                        <% results.forEach((row) => { %>
+                        <% group.forEach((row) => { %>
                         <option value="<%= row.id %>"><%= row.name %></option>
                         <% }); %>
                     </select>
@@ -80,7 +80,7 @@
                 if (result.value) {
                     $.ajax({
                         type: 'post',
-                        url: '/inputmsisdn',
+                        url: '/msisdn/save',
                         data: $(this).serialize(),
                         success: function (e) {
                             if (!e.error) {
@@ -88,18 +88,16 @@
                                     title: 'Insert Msisdn',
                                     text: "Your msisdn has been added.",
                                     type: 'success',
-                                    showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 3000
                                 }).then(function () {
                                     location.reload();
                                 });
                             } else {
                                 Swal.fire({
-                                    title: 'Insert Msisdn',
+                                    title: 'Insert Msisdn Failed',
                                     text: e.message,
                                     type: 'error',
-                                    showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 5000
                                 })
                             }
                         }

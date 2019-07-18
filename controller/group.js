@@ -1,25 +1,6 @@
 const db = require('../db/database');
 
 function Constructor() {
-
-	const findGroup = (cond) => {
-		return new Promise(resolve => {
-			console.log(cond);
-			var query = 'SELECT * FROM p_group ORDER BY id DESC';
-			db.query(query,
-				function (error, rows, fields) {
-					if (error) {
-						console.log(error)
-					}
-					else {
-						resolve(rows); //Kembalian berupa kontak data
-					}
-				});
-		});
-	}
-
-
-
 	this.get = async (req, res, next) => {
 		var user_session = req.session;
 		var mainpage = 'group_input';
@@ -28,16 +9,29 @@ function Constructor() {
 		res.render('page/index', { user_session, mainpage, group });
     }
     
-	this.save = (req, res, next) => {
+	this.save = async (req, res, next) => {
 		var group = req.body.name;
 		var source = req.body.source;
 		if (group && source) {
-			db.query("INSERT INTO p_group (name,source) values(?,?)", [group, source], (error, results) => {
-				if (error) {
-					console.log(error);
-					return res.json({ error: true, message: 'something wrong' });
+			let query = await db.Group.findOrCreate({
+				where:{
+					name:group.trim(),
+					source:source.trim()
+				},
+				defaults:{
+					name:group.trim(),
+					source:source.trim()
 				}
-				return res.json({ error: false, message: 'Input group success' });
+			}).then(([data,isCreated]) => {
+				console.log(isCreated);
+				if(isCreated){ //jika berhasil create
+					return res.json({error:false,message:'Insert Group succeed!'});
+				}else{
+					return res.json({error:true,message:'Group already exist!'});
+				}
+			}).catch(err => {
+				console.log(err);
+				return res.json({error:true,message:'Something wrong'});
 			});
 		} else {
 			return res.json({ error: true, message: 'Fill text box' });

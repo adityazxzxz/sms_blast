@@ -6,7 +6,7 @@ function Constructor() {
 	this.getall = async (req, res, next) => {
 		var user_session = req.session;
         var mainpage = 'msisdn_input';
-		let group = await db.Group.findAll();
+		let group = await db.Group.findAll().catch(err => console.log(err));
 		res.render('page/index', { user_session, mainpage, group });
 	}
     

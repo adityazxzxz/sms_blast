@@ -19,11 +19,11 @@ module.exports = {
 		app.route('/msisdndetail/:id').get(session,sms.msisdndetail);
 
 		//Sms
-		app.route('/sms').get(session,sms.sms);
+		app.route('/sms').get(sms.sms);
 		app.route('/sms/send').post(session,sms.sendsms);
 
 		//Group
-		app.route('/group').get(session,group.get);
+		app.route('/group').get(group.get);
 		app.route('/group/save').post(session,sms.savegroup);
 
 		//MSISDN

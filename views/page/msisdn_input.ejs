@@ -41,9 +41,9 @@
                     <label for="msisdn">Group</label>
                     <select class="form-control" name="group_id">
                         <option value="">Choose Group</option>
-                        <% group.forEach((row) => { %>
+                        <% if(group){group.forEach((row) => { %>
                         <option value="<%= row.id %>"><%= row.name %></option>
-                        <% }); %>
+                        <% });} %>
                     </select>
                 </div>
                 <div class="form-group">

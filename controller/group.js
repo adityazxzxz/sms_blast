@@ -23,19 +23,9 @@ function Constructor() {
 	this.get = async (req, res, next) => {
 		var user_session = req.session;
 		var mainpage = 'group_input';
-		if(mainpage === "group_inpu"){
-			var cond = {
-				test:'haha'
-			};
-		}else{
-			var cond = {
-				test:'hoho'
-			};
-		}
-
-
-		let results = await findGroup(cond);
-		res.render('page/index', { user_session, mainpage, results });
+		
+		let group = await db.Group.findAll().catch(err => console.log(err));
+		res.render('page/index', { user_session, mainpage, group });
     }
     
 	this.save = (req, res, next) => {

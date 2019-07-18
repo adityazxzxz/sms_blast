@@ -95,14 +95,14 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#message").keypress(function (e) {
-            if (e.which < 31 || (e.which > 32 && e.which < 48) ||
-                (e.which > 57 && e.which < 65) ||
-                (e.which > 90 && e.which < 97) ||
-                e.which > 122) {
-                e.preventDefault();
-            }
-        });
+        // $("#message").keypress(function (e) {
+        //     if (e.which < 31 || (e.which > 32 && e.which < 48) ||
+        //         (e.which > 57 && e.which < 65) ||
+        //         (e.which > 90 && e.which < 97) ||
+        //         e.which > 122) {
+        //         e.preventDefault();
+        //     }
+        // });
         $("form").submit(function () {
             Swal.fire({
                 title: 'Are you sure?',

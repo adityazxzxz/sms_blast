@@ -10,7 +10,7 @@ module.exports = {
 	configure:(app) => {
 		app.route('/').get(session,(req,res) => res.redirect('/home'));
 		app.route('/login').get(user.signin);
-		app.route('/home').get(session,user.home);
+		app.route('/home').get(user.home);
 		app.route('/logout').get(session,user.logout);
 		
 		
@@ -20,7 +20,7 @@ module.exports = {
 
 		//Sms
 		app.route('/sms').get(sms.sms);
-		app.route('/sms/send').post(session,sms.sendsms);
+		app.route('/sms/send').post(sms.sendsms);
 
 		//Group
 		app.route('/group').get(group.get);
@@ -36,7 +36,7 @@ module.exports = {
 		
 		
 		
-		app.route('/msisdn/delete').post(session,sms.delete);
+		app.route('/msisdn/delete').post(sms.delete);
 		
 
 		// app.route('/home').get((req,res,next) => {

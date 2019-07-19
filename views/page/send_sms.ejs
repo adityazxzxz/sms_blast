@@ -41,7 +41,7 @@
                     <label for="msisdn">Group</label>
                     <select class="form-control" name="group_id">
                         <option value="">Choose Group</option>
-                        <% results.forEach((row) => { %>
+                        <% group.forEach((row) => { %>
                         <option value="<%= row.id %>"><%= row.name %></option>
                         <% }); %>
                     </select>
@@ -78,7 +78,7 @@
                                 <tr>
                                     <th scope="row"><%= i%></th>
                                     <td><%= row.content%></td>
-                                    <td>@<%= new Date(row.created_at)%></td>
+                                    <td><%= row.created_at%></td>
                                     <td><a class='btn btn-primary' href='log/detail/<%= row.id %>'>View Detail Log</a>
                                     </td>
                                 </tr>

@@ -105,9 +105,9 @@ function Constructor() {
 	this.sms = async (req, res, next) => {
 		var user_session = req.session;
 		var mainpage = 'send_sms';
-		let results = await findGroup();
-		let smscontent = await findContent();
-		res.render('page/index', { user_session, mainpage, results, smscontent });
+		let group = await db.Group.findAll().catch((err) => console.log(err));
+		let smscontent = await db.Sms.findAll().catch((err) => console.log(err));
+		res.render('page/index', { user_session, mainpage, group, smscontent });
 	}
 
 	this.group = async (req, res, next) => {

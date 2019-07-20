@@ -15,12 +15,12 @@ module.exports = {
 		
 		
 		
-		app.route('/log/detail/:id').get(session,sms.log);
-		app.route('/msisdndetail/:id').get(session,sms.msisdndetail);
+		app.route('/log/detail/:id').get(sms.log);
+		app.route('/msisdndetail/:id').get(sms.msisdndetail);
 
 		//Sms
 		app.route('/sms').get(sms.sms);
-		app.route('/sms/send').post(sms.sendsms);
+		app.route('/sms/send').post(sms.send);
 
 		//Group
 		app.route('/group').get(group.get);

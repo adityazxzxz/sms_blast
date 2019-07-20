@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Msisdn = sequelize.define(
-        'p_msisdn', {
+        'msisdn', {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.INTEGER,
             },
             msisdn: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING,
                 validate:{
                     isNumeric:true
                 }
@@ -22,10 +22,13 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         {
+            name:{
+                singular:'msisdn',
+                plural:'msisdns'
+            },
             timestamps: false,
-            paranoid: false,
             underscored: false,
-            freezeTableName: true,
+            freezeTableName:true,
             tableName:'p_msisdn'
         }
     );

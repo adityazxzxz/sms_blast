@@ -1,3 +1,4 @@
+var moment = require('moment');
 module.exports = (sequelize,Sequelize) => {
     const Logs = sequelize.define(
         'p_logs',{

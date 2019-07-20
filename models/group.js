@@ -1,6 +1,6 @@
 module.exports = (sequelize,Sequelize) => {
     const Group = sequelize.define(
-        'p_group',{
+        'group',{
             id:{
                 type:Sequelize.INTEGER,
                 primaryKey:true,
@@ -22,12 +22,16 @@ module.exports = (sequelize,Sequelize) => {
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         },{
-            paranoid: false,
+            name:{
+                singular:'group',
+                plural:'groups'
+            },
             underscored: false,
             timestamps:false,
             freezeTableName:true,
             tableName:'p_group'
         }
     );
+
     return Group;
 }

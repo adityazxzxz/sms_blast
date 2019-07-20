@@ -12,6 +12,7 @@ module.exports = (sequelize,Sequelize) => {
             },
             content:{
                 type:Sequelize.STRING,
+                allowNull:false
             },
             created_at:{
                 type:'TIMESTAMP',

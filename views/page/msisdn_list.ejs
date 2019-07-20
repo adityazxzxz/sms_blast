@@ -25,11 +25,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% var i = 1; if(results.length > 0){results.forEach((row) => { %>
+                                    <% var i = 1; if(msisdn){msisdn.forEach((row) => { %>
                                     <tr>
                                         <th scope="row"><%= i%></th>
                                         <td><%= row.msisdn%></td>
-                                        <td><%= row.id%></td>
+                                        <td><%= row.created_at%></td>
                                         <td><button class="btn btn-danger delete-btn"
                                                 data-id="<%= row.id%>">Delete</button></td>
                                     </tr>

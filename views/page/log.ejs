@@ -1,49 +1,80 @@
-<!-- page head start-->
-            <div class="page-head">
-                <h3>
-                    Dashboard
-                </h3>
-                <span class="sub-title">Welcome to SMS Burst App</span>
-            </div>
-            <!-- page head end-->
+<div class="wrapper">
+  <ul class="breadcrumb">
+    <li><a href="/home"><i class="fa fa-home"></i> Home</a></li>
+    <li>
+      SMS</li>
+    <li class="active">
+      Msisdn Log</li>
+  </ul>
+  <div class="panel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-4">
+          <button type="button" class="btn btn-default btn-md"><i class="fa fa-plus"></i> New Msisdn</button>
+        </div>
+        <div class="col-md-4 text-center">
 
-            <!--body wrapper start-->
-            <div class="wrapper">
-                <div class="row">
-                    <div class="col-md-12">
-                        <section class="panel">
-                            <div class="panel-body">
-                                <div class="jumbotron">
-                 <div class="panel-body">
-                 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">MSISDN</th>
-      <th scope="col">Status</th>
-      <th scope="col">Created At</th>
-      <th scope="col">Updated At</th>
-    </tr>
-  </thead>
-  <tbody><% var i = 1; if(log){log.forEach((row) => { %>
-                    <tr>
-      <th scope="row"><%= i%></th>
-      <td><%= row.msisdn%></td>
-      <td><%= row.status%></td>
-      <td>@<%= new Date(row.created_at)%></td>
-      <td>@<%= new Date(row.updated_at)%></td>
-    </tr>
-                <% i++}) ;} %>
-   
-  </tbody>
-</table>
-                 </div>                  
-                </div>
-                            </div>
-                        </section>
+        </div>
+        <div class="col-md-1 text-right">
+
+        </div>
+        <div class="col-md-3 text-right">
+          <!-- <form action="group/msisdn" class="form-inline"
+                    method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" value="">
+                        <span class="input-group-btn">
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>
+                                Search</button>
+                        </span>
                     </div>
-                </div>
+                </form> -->
+        </div>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              No
+            </th>
+            <th>
+              Msisdn
+            </th>
+            <th>
+              Status
+            </th>
+            <th>
+              created at
+            </th>
+            <th>
+              updated at
+            </th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <% var i = 1; if(log){log.forEach((row) => { %>
+          <tr>
+            <td><%= i%></td>
+            <td><%= row.msisdn%></td>
+            <td><%= row.status%></td>
+            <td><%= row.created_at%></td>
+            <td><%= row.updated_at%></td>
+          </tr>
+          <% i++});} %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              Total Record : <%= log.length %> </td>
+            <td colspan="5" align="right"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 
 
-            </div>
-            <!--body wrapper end-->
+</div>
+<!--body wrapper end-->

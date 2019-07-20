@@ -47,20 +47,6 @@ function Constructor() {
 		});
 	}
 
-	const msisdnList = (id) => {
-		return new Promise(resolve => {
-			var query = 'SELECT * FROM p_msisdn WHERE group_id=? ORDER BY id DESC';
-			db.query(query, [id],
-				function (error, rows, fields) {
-					if (error) {
-						console.log(error)
-					}
-					else {
-						resolve(rows); //Kembalian berupa kontak data
-					}
-				});
-		});
-	}
 
 	const deleteMsisdn = (id) => {
 		return new Promise(resolve => {
@@ -79,20 +65,11 @@ function Constructor() {
 		var id = req.body.id;
 		let results = await deleteMsisdn(id);
 		console.log(results);
-		if(results.affectedRows > 0){
-			res.json({error:false,message:"Delete Succeed"});
-		}else{
-			res.json({error:true,message:"Delete Failed"});
+		if (results.affectedRows > 0) {
+			res.json({ error: false, message: "Delete Succeed" });
+		} else {
+			res.json({ error: true, message: "Delete Failed" });
 		}
-	}
-
-	this.msisdndetail = async (req, res, next) => {
-		var user_session = req.session;
-		var id = req.params.id;
-		let results = await msisdnList(id);
-		console.log(results);
-		var mainpage = 'msisdn_list';
-		res.render('page/index', { user_session, mainpage, results });
 	}
 
 	this.input = async (req, res, next) => {
@@ -106,129 +83,85 @@ function Constructor() {
 		var user_session = req.session;
 		var mainpage = 'send_sms';
 		let group = await db.Group.findAll().catch((err) => console.log(err));
-		let smscontent = await db.Sms.findAll().catch((err) => console.log(err));
+		let smscontent = await db.Sms.findAll({order:[['id','DESC']]}).catch((err) => console.log(err));
 		res.render('page/index', { user_session, mainpage, group, smscontent });
 	}
 
-	this.group = async (req, res, next) => {
-		var user_session = req.session;
-		var mainpage = 'group_input';
-		if(mainpage === "group_inpu"){
-			var cond = {
-				test:'haha'
-			};
-		}else{
-			var cond = {
-				test:'hoho'
-			};
-		}
-
-
-		let results = await findGroup(cond);
-		res.render('page/index', { user_session, mainpage, results });
-	}
 
 	this.log = async (req, res, next) => {
 		var id = req.params.id;
 		var user_session = req.session;
 		var mainpage = 'log';
-		let results = await findLog(id);
-		res.render('page/index', { user_session, mainpage, results });
+		let log = await db.Logs.findAll({where:{content_id:id},order:[['id','DESC']]}).catch((err) => console.log(err));
+		res.render('page/index', { user_session, mainpage, log });
 	}
 
-	this.savegroup = (req, res, next) => {
-		var group = req.body.name;
-		var source = req.body.source;
-		if (group && source) {
-			db.query("INSERT INTO p_group (name,source) values(?,?)", [group, source], (error, results) => {
-				if (error) {
-					console.log(error);
-					return res.json({ error: true, message: 'something wrong' });
-				}
-				return res.json({ error: false, message: 'Input group success' });
-			});
-		} else {
-			return res.json({ error: true, message: 'Fill text box' });
-		}
 
-	}
+	this.send = async (req, res, next) => {
+		var msg = req.body.message;
+		var id = req.body.group_id;
 
-	this.sendsms = (req, res, next) => {
-		var message = req.body.message;
-		var group_id = req.body.group_id;
-		if (message && group_id) {
-			db.query("SELECT * FROM p_msisdn WHERE group_id=? limit 1", [group_id], (err, data) => {
-				if (err)
-					console.log('Error ', err);
-				if (data && data.length) {
-					db.query('SELECT a.*,b.source FROM p_msisdn a JOIN p_group b ON b.id=a.group_id WHERE a.group_id=?', [group_id], (error, dataraw) => {
-						if (error) {
-							console.log(error);
-							return res.json({ error: true, message: 'something wrong' });
-						}
-						db.query("INSERT INTO p_sms_content (content) values (?)", [message], (err, datainsert) => {
-							if (err) {
-								console.log(err);
-								return res.json({ error: true, message: 'something wrong' });
-							}
-							console.log(datainsert.insertId);
-							dataraw.forEach(function (datauser) {
-								console.log(datauser);
-								db.query('INSERT INTO p_logs (content_id,msisdn) values(?,?)', [datainsert.insertId, datauser.msisdn], (err, data) => {
-									if (err) throw err;
-									console.log('p_logs ', datauser.msisdn);
+		if (msg && id) {
+			var msisdn_data = await db.Msisdn.findAll({
+				where: {
+					group_id: id
+				},
+				include: [{
+					model: db.Group,
+					as: 'group',
+					where: {
+						id: id
+					}
+				}]
+			}).then((data) => {
+				if (data) {
+					db.Sms.create({content:msg}).then((sms) => {
+						data.forEach((msisdn) => {
+							console.log('msisdn ', msisdn.msisdn);
+							db.Logs.create({ content_id: sms.id, msisdn: msisdn.msisdn }).then((log) => {
+								if (log) {
+									console.log('Source ', msisdn.group.source);
+									console.log('Content id ',sms.id);
+									console.log('Log id ',log.id);
 									axios.get('https://httpsmsc.montymobile.com/HTTP/api/Client/SendSMS', {
 										params: {
 											username: conf.m_username,
 											password: conf.m_password,
-											destination: datauser.msisdn,
-											source: datauser.source,
-											text: message,
+											destination: msisdn.msisdn,
+											source: msisdn.group.source,
+											text: msg,
 											dataCoding: conf.m_datacoding
 										}
 									}).then((res) => {
 										var status = (res.data.ErrorCode === 0) ? 'success' : 'fail';
-										db.query('UPDATE p_logs set status=?,response=? where id=?', [status, JSON.stringify(res.data), data.insertId], (error, data) => {
-											if (error) {
-												console.log(error);
-												return res.json({ error: true, message: 'something wrong' });
-											}
-										});
-									})
-										.catch((errorr) => {
-											console.log(errorr);
-										});
-								});
-
-							});
+										db.Logs.update({
+											status: status,
+											response: JSON.stringify(res.data)
+										}, {
+												where: {
+													id: log.id
+												}
+											})
+									}).catch((err) => console.log(err));
+								}
+							}).catch((err) => console.log(err));
+	
 						});
-					});
-					return res.json({ error: false, 'message': 'Success' });
-				} else {
-					return res.json({ error: true, 'message': 'Msisdn not found' });
+					})
+					
 				}
+
+			}).catch((err) => {
+				console.log(err);
+				res.json({ error: true, message: 'something wrong!' });
 			});
-		} else {
-			return res.json({ error: true, 'message': 'Fill input box' });
+
+
+			res.json({ error: false, message: 'OK' });
+
 		}
 	}
 
-	this.inputmsisdn = (req, res, next) => {
-		var msisdn = req.body.msisdn;
-		var group = req.body.group_id;
-		if (msisdn && group) {
-			db.query('INSERT IGNORE INTO p_msisdn(group_id,msisdn) values(?,?)', [group, msisdn], (error, data) => {
-				if (error) {
-					console.log(error);
-					return res.json({ error: true, message: 'something wrong' });
-				}
-
-				return res.json({ 'error': false, 'message': 'Success' });
-			});
-		} else {
-			return res.json({ 'error': true, 'message': 'Fill the text box!' });
-		}
-	}
 }
 
 module.exports = new Constructor();

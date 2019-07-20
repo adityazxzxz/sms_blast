@@ -9,22 +9,23 @@ function Constructor(){
 		var username = req.body.username;
 		var password = req.body.password;
 		if(username && password){
-				db.query('SELECT * FROM p_users WHERE username=? AND password=?',[username,md5(password)],(error,results) => {
-					if(error) throw error;
-					if(results.length > 0){
-						console.log(results);
+				db.Users.findOne({
+					where:{
+						username:username,
+						password:md5(password)
+					}
+				}).then((result) => {
+					if(result){
 						req.session.loggedin = true;
 						req.session.username = username;
 						res.redirect('/');
 					}else{
-						console.log('Data notfound');
-						res.redirect('/');
+						res.redirect('/login');
 					}
-					return;
-				});
+				}).catch((err) => res.redirect('/login'));
 		}else{
 			console.log('username or pass not match');
-			res.redirect('/');
+			res.redirect('/login');
 		}
 	}
 

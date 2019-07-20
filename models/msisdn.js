@@ -1,3 +1,7 @@
+'use strict'
+
+var moment = require('moment');
+
 module.exports = (sequelize, Sequelize) => {
     const Msisdn = sequelize.define(
         'msisdn', {
@@ -18,7 +22,10 @@ module.exports = (sequelize, Sequelize) => {
             },
             created_at: {
                 type: 'TIMESTAMP',
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                get:function(){
+                    return moment.tz(this.getDataValue('created_at'),'Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
+                }
             }
         },
         {

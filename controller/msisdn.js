@@ -9,6 +9,18 @@ function Constructor() {
 		let group = await db.Group.findAll().catch(err => console.log(err));
 		res.render('page/index', { user_session, mainpage, group });
 	}
+
+	this.getByGroup = async (req, res, next) => {
+		var user_session = req.session;
+		var id = req.params.id;
+		let msisdn = await db.Msisdn.findAll({
+			where: {
+				group_id: id
+			}
+		}).catch((err) => console.log(err));
+		var mainpage = 'msisdn_list';
+		res.render('page/index', { user_session, mainpage, msisdn });
+	}
     
 	this.save = async (req, res, next) => {
 		var group = req.body.group_id;
@@ -38,6 +50,21 @@ function Constructor() {
 			return res.json({ error: true, message: 'Fill text box' });
 		}
 
+	}
+
+	this.delete = (req, res, next) => {
+		var id = req.body.id;
+		db.Msisdn.destroy({
+			where:{
+				id:id
+			}
+		}).then((results) => {
+			if(results){
+				res.json({ error: false, message: "Delete Succeed" });
+			}else{
+				res.json({ error: true, message: "Delete Failed" });
+			}
+		}).catch((err) => console.log(err));
 	}
 }
 

@@ -1,46 +1,72 @@
-<!-- page head start-->
-<div class="page-head">
-    <h3>
-        Dashboard
-    </h3>
-    <span class="sub-title">Welcome to SMS Burst App</span>
-</div>
-<!-- page head end-->
-
 <!--body wrapper start-->
 <div class="wrapper">
-    <div class="row">
-        <div class="col-md-12">
-            <section class="panel">
-                <div class="panel-body">
-                    <div class="jumbotron">
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">MSISDN</th>
-                                        <th scope="col">Created At</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% var i = 1; if(msisdn){msisdn.forEach((row) => { %>
-                                    <tr>
-                                        <th scope="row"><%= i%></th>
-                                        <td><%= row.msisdn%></td>
-                                        <td><%= row.created_at%></td>
-                                        <td><button class="btn btn-danger delete-btn"
-                                                data-id="<%= row.id%>">Delete</button></td>
-                                    </tr>
-                                    <% i++});} %>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <ul class="breadcrumb">
+        <li><a href="/home"><i class="fa fa-home"></i> Home</a></li>
+        <li>
+            Group</li>
+            <li class="active">
+                List Msisdn</li>
+    </ul>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-default btn-md" ><i class="fa fa-plus"></i> New Msisdn</button>
                 </div>
-            </section>
+                <div class="col-md-4 text-center">
+
+                </div>
+                <div class="col-md-1 text-right">
+
+                </div>
+                <div class="col-md-3 text-right">
+                    <!-- <form action="group/msisdn" class="form-inline"
+                        method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q" value="">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i>
+                                    Search</button>
+                            </span>
+                        </div>
+                    </form> -->
+                </div>
+            </div>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Msisdn
+                        </th>
+                        <th width="125" class="text-center">
+                            Action
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var i = 1; if(msisdn){msisdn.forEach((row) => { %>
+                    <tr>
+                        <td><%= i%></td>
+                        <td><%= row.msisdn%></td>
+                        <td class="text-center">
+                                <a href='#' class='btn btn-primary'>Get List</a>
+                        </td>
+                    </tr>
+                    <% i++});} %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            Total Record : <%= msisdn.length %> </td>
+                        <td colspan="5" align="right"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 
